@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>二维码生成器</h1>
+        </div>
+        
+        <div class="main-content">
+            <!-- 左侧输入区域 -->
+            <div class="input-section">
+                <h3>输入内容</h3>
+                <textarea id="textInput" placeholder="请输入要生成二维码的内容..." rows="3"></textarea>
+                <div class="input-buttons">
+                    <button id="generateBtn" class="btn-primary">生成二维码</button>
+                    <button id="clearBtn" class="btn-secondary">清空</button>
+                </div>
+            </div>
+            
+            <!-- 中间参数设置区域 -->
+            <div class="settings-section">
+                <h3>参数设置</h3>
+                <div class="setting-group">
+                    <label for="sizeSelect">尺寸:</label>
+                    <select id="sizeSelect">
+                        <option value="200">200x200</option>
+                        <option value="300" selected>300x300</option>
+                        <option value="400">400x400</option>
+                        <option value="500">500x500</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="errorLevel">纠错级别:</label>
+                    <select id="errorLevel">
+                        <option value="L">低 (L)</option>
+                        <option value="M" selected>中 (M)</option>
+                        <option value="Q">较高 (Q)</option>
+                        <option value="H">高 (H)</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="colorForeground">前景色:</label>
+                    <input type="color" id="colorForeground" value="#000000">
+                </div>
+                
+                <div class="setting-group">
+                    <label for="colorBackground">背景色:</label>
+                    <input type="color" id="colorBackground" value="#ffffff">
+                </div>
+            </div>
+            
+            <!-- 右侧二维码展示区域 -->
+            <div class="qr-section">
+                <h3>二维码预览</h3>
+                <div id="qrContainer">
+                    <div id="qrPlaceholder">请输入内容并点击生成按钮</div>
+                    <canvas id="qrCanvas" style="display: none;"></canvas>
+                </div>
+                <div class="qr-buttons">
+                    <button id="downloadBtn" class="btn-primary" disabled>下载二维码</button>
+                    <button id="copyBtn" class="btn-secondary" disabled>复制到剪贴板</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="qrcode.min.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

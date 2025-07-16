@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收藏夹整理助手</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>收藏夹整理助手</h1>
+            <button id="syncBtn" class="sync-btn">🔄 同步收藏夹</button>
+        </header>
+        
+        <div class="search-section">
+            <input type="text" id="searchInput" placeholder="搜索收藏的网站..." class="search-input">
+            <div class="search-stats">
+                <span id="totalCount">总计: 0 个收藏</span>
+                <span id="filteredCount"></span>
+            </div>
+        </div>
+        
+        <div class="bookmarks-container">
+            <div id="loadingMsg" class="loading">正在加载收藏夹...</div>
+            <div id="emptyMsg" class="empty-state" style="display: none;">
+                <p>暂无收藏夹数据</p>
+                <p>点击上方的同步按钮获取您的收藏夹</p>
+            </div>
+            <div id="bookmarksList" class="bookmarks-list"></div>
+        </div>
+        
+        <footer>
+            <div class="last-sync">
+                <span id="lastSyncTime">未同步</span>
+            </div>
+        </footer>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "收藏夹整理助手",
+  "version": "1.0.0",
+  "description": "一键同步和搜索浏览器收藏夹，让您快速找到收藏的网站",
+  "permissions": [
+    "bookmarks",
+    "storage",
+    "activeTab"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "收藏夹整理助手"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

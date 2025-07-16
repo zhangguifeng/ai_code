@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator Test</title>
+    <link rel="stylesheet" href="popup.css">
+    <style>
+        body {
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .test-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .test-note {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>QR Code Generator - 功能测试</h1>
+            <p>这是一个独立的测试页面，用于验证二维码生成功能</p>
+        </div>
+        
+        <div class="test-note">
+            <h3>📋 测试说明</h3>
+            <ul>
+                <li>在左侧输入框中输入任意内容</li>
+                <li>调整中间的参数设置</li>
+                <li>点击生成按钮查看二维码</li>
+                <li>测试下载和复制功能</li>
+            </ul>
+        </div>
+        
+        <div class="container">
+            <div class="main-content">
+                <!-- 左侧输入区域 -->
+                <div class="input-section">
+                    <h3>输入内容</h3>
+                    <textarea id="textInput" placeholder="请输入要生成二维码的内容...\n\n示例：\n- https://www.example.com\n- 联系方式：张三 13800138000\n- WiFi:T:WPA;S:MyNetwork;P:password123;;\n- 任意文本内容" rows="8"></textarea>
+                    <div class="input-buttons">
+                        <button id="generateBtn" class="btn-primary">生成二维码</button>
+                        <button id="clearBtn" class="btn-secondary">清空</button>
+                    </div>
+                </div>
+                
+                <!-- 中间参数设置区域 -->
+                <div class="settings-section">
+                    <h3>参数设置</h3>
+                    <div class="setting-group">
+                        <label for="sizeSelect">尺寸:</label>
+                        <select id="sizeSelect">
+                            <option value="200">200x200</option>
+                            <option value="300" selected>300x300</option>
+                            <option value="400">400x400</option>
+                            <option value="500">500x500</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label for="errorLevel">纠错级别:</label>
+                        <select id="errorLevel">
+                            <option value="L">低 (L) - ~7%</option>
+                            <option value="M" selected>中 (M) - ~15%</option>
+                            <option value="Q">较高 (Q) - ~25%</option>
+                            <option value="H">高 (H) - ~30%</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label for="colorForeground">前景色:</label>
+                        <input type="color" id="colorForeground" value="#000000">
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label for="colorBackground">背景色:</label>
+                        <input type="color" id="colorBackground" value="#ffffff">
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label>快速配色:</label>
+                        <div style="display: flex; gap: 5px; margin-top: 5px;">
+                            <button onclick="setColors('#000000', '#ffffff')" style="background: #000; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">经典</button>
+                            <button onclick="setColors('#1976d2', '#e3f2fd')" style="background: #1976d2; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">蓝色</button>
+                            <button onclick="setColors('#d32f2f', '#ffebee')" style="background: #d32f2f; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">红色</button>
+                            <button onclick="setColors('#388e3c', '#e8f5e8')" style="background: #388e3c; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">绿色</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧二维码展示区域 -->
+                <div class="qr-section">
+                    <h3>二维码预览</h3>
+                    <div id="qrContainer">
+                        <div id="qrPlaceholder">请输入内容并点击生成按钮</div>
+                        <canvas id="qrCanvas" style="display: none;"></canvas>
+                    </div>
+                    <div class="qr-buttons">
+                        <button id="downloadBtn" class="btn-primary" disabled>下载二维码</button>
+                        <button id="copyBtn" class="btn-secondary" disabled>复制到剪贴板</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="qrcode.min.js"></script>
+    <script src="popup.js"></script>
+    <script>
+        // 快速配色函数
+        function setColors(foreground, background) {
+            document.getElementById('colorForeground').value = foreground;
+            document.getElementById('colorBackground').value = background;
+            
+            // 如果已有二维码，重新生成
+            const textInput = document.getElementById('textInput');
+            if (textInput.value.trim()) {
+                // 触发重新生成
+                document.getElementById('generateBtn').click();
+            }
+        }
+        
+        // 页面加载完成后添加一些示例内容
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('textInput');
+            textInput.value = 'https://github.com/davidshimjs/qrcodejs\n\n这是一个二维码生成器测试！\n\n支持中文、英文、数字、符号等各种内容。';
+        });
+    </script>
+</body>
+</html>
